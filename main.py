@@ -75,9 +75,16 @@ def generar_matriz_aleatoria():
             matriz[i, j] = f"{c}{d}{t}"
     return matriz
 
-def cargar_matriz_archivo(ruta="D:\\municipio.txt"):
+def cargar_matriz_archivo(ruta=None):
     matriz = generate_matriz()
-    carpeta_actual = os.path.dirname(os.path.abspath(__file__))
+    carpeta_actual = os.path.dirname(os.path.abspath(__file__)) 
+    # Profe: aqui detectamos el sistema operativo para usar la ruta correcta.
+    # En Windows usamos la ruta D:\municipio.txt, en Mac/Linux la carpeta del script.
+    if ruta is None:
+        if os.name == 'nt':  # 'nt' = Windows
+            ruta = "D:\\municipio.txt"
+        else:  # Mac (posix) o Linux
+            ruta = os.path.join(carpeta_actual, "municipio.txt")
     rutas_candidatas = [ruta, "municipio.txt", os.path.join(carpeta_actual, "municipio.txt")]
     for ruta_actual in rutas_candidatas:
         try:
@@ -156,7 +163,7 @@ def main():
             print("\nMatriz generada aleatoriamente.")
 
         elif opcion == '2':
-            matriz = cargar_matriz_archivo("D:\\municipio.txt")
+            matriz = cargar_matriz_archivo()
             datos_cargados = True
 
         elif opcion == '3':
