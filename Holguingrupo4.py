@@ -1,8 +1,13 @@
-import numpy as np
-import random
-import os
+# Simulación de taxis en un municipio de 20x20.
+# Cada terminal (T1-T4) recorre la matriz con una ruta distinta (zigzag/espiral).
+# El programa calcula tiempo, distancia y combustible hasta el cliente.
+
+import numpy as np  
+import random       
+import os           
 
 def ruta_zigzag_vertical_t1():
+    # Ruta de T1: recorre la matriz en zigzag por columnas desde (0,0).
     camino = []
     for j in range(20):
         if j % 2 == 0:
@@ -14,6 +19,7 @@ def ruta_zigzag_vertical_t1():
     return camino
 
 def ruta_espiral_t2():
+    # Ruta de T2: recorre la matriz en espiral desde el borde hacia el centro.
     camino = []
     for capa in range(10):
         top = capa
@@ -31,6 +37,7 @@ def ruta_espiral_t2():
     return camino
 
 def ruta_zigzag_horizontal_t3():
+    # Ruta de T3: recorre la matriz en zigzag por filas desde (19,0).
     camino = []
     for i in range(19, -1, -1):
         if (19 - i) % 2 == 0:
@@ -42,6 +49,7 @@ def ruta_zigzag_horizontal_t3():
     return camino
 
 def ruta_zigzag_vertical_t4():
+    # Ruta de T4: recorre la matriz en zigzag por columnas desde (19,19).
     camino = []
     for j in range(19, -1, -1):
         if (19 - j) % 2 == 0:
@@ -54,16 +62,19 @@ def ruta_zigzag_vertical_t4():
 
 
 def generate_matriz():
+    # Crea una matriz 20x20 vacía (cada celda con "00000").
     matriz = np.array([["00000"]*20]*20)
     return matriz
 
 def parse_celda(valor):
+    # Extrae la distancia y el tiempo de una celda de la matriz.
     v_str = str(valor).replace(" ", "").replace(",", "")
     distancia = int(v_str[1:3])
     tiempo = int(v_str[3:])
     return distancia, tiempo
 
 def generar_matriz_aleatoria():
+    # Llena la matriz con dirección, distancia y tiempo aleatorios.
     matriz = generate_matriz()
     puntos_cardinales = ['N', 'S', 'E', 'O']
     for i in range(20):
@@ -75,6 +86,7 @@ def generar_matriz_aleatoria():
     return matriz
 
 def cargar_matriz_archivo(ruta=None):
+    # Carga la matriz desde un archivo txt; si no lo encuentra, usa datos aleatorios.
     matriz = generate_matriz()
     carpeta_actual = os.path.dirname(os.path.abspath(__file__)) 
     # Profe: aqui detectamos el sistema operativo para usar la ruta correcta.
@@ -102,6 +114,7 @@ def cargar_matriz_archivo(ruta=None):
     return generar_matriz_aleatoria()
 
 def calcular_estadisticas_ruta(matriz, camino, destino_x, destino_y):
+    # Suma tiempo, distancia y combustible a lo largo de la ruta hasta el cliente.
     tiempo_total = 0
     distancia_total = 0
     camino_recorrido = []
@@ -118,6 +131,7 @@ def calcular_estadisticas_ruta(matriz, camino, destino_x, destino_y):
     return tiempo_total, distancia_total, combustible, camino_recorrido
 
 def mostrar_grafico_emoji(camino_recorrido, destino_x, destino_y):
+    # Dibuja la ruta en la matriz con emojis (taxi, cliente y celdas vacías).
     print("\nVisualización de la ruta óptima:")
     for i in range(20):
         fila_str = ""
@@ -132,6 +146,7 @@ def mostrar_grafico_emoji(camino_recorrido, destino_x, destino_y):
 
 
 def main():
+    # Menú principal que gestiona la simulación según la opción elegida.
     matriz = generate_matriz()
     datos_cargados = False
 
